@@ -1,0 +1,19 @@
+{
+  "name": "refactor-lodash-Imports",
+  "version": "1.0.0",
+  "description": "script for refactor default import",
+  "main": "index.ts",
+  "repository": "git@github.com:choi2021/refactor-lodash-Imports.git",
+  "author": "Youngjun Choi <juni2004c@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ts-morph": "^21.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "start": "ts-node ./index.ts"
+  }
+}
