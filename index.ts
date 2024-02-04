@@ -13,7 +13,7 @@ function findLodashUsages(importDeclaration: ImportDeclaration, sourceFile: Sour
             }
         }
     })
-    
+
     return usages;
 }
 
@@ -78,7 +78,7 @@ function refactorLodashImports() {
 
     sourceFiles.forEach(sourceFile => {
         const lodashImports = sourceFile.getImportDeclarations()
-            .filter(importDeclaration => importDeclaration.getModuleSpecifierValue() === 'lodash');
+            .filter(importDeclaration => importDeclaration.getModuleSpecifierValue() === 'lodash' || importDeclaration.getModuleSpecifierValue() === 'lodash/fp');
 
         lodashImports.forEach(importDeclaration => {
             const defaultImport = importDeclaration.getDefaultImport();
