@@ -3,7 +3,7 @@ import path from "path";
 
 function findLodashUsages(importDeclaration: ImportDeclaration, sourceFile: SourceFile) {
     const usages: string[] = [];
-    const regex = /_\.([a-zA-Z0-9_]+)/g;
+    const regex = /_\.([a-zA-Z0-9_]+)/;
     sourceFile.forEachDescendant(node => {
 
         if (node.getKindName() === 'PropertyAccessExpression' && node.getText().startsWith('_.')) {
