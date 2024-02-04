@@ -1,14 +1,19 @@
-import {ImportDeclaration, ImportSpecifier, Project, SourceFile} from 'ts-morph';
+import {ImportDeclaration, ImportSpecifier, Project, QuoteKind, SourceFile} from 'ts-morph';
 import path from "path";
 
 function findLodashUsages(importDeclaration: ImportDeclaration, sourceFile: SourceFile) {
     const usages: string[] = [];
+    const regex = /_\.([a-zA-Z0-9_]+)/g;
     sourceFile.forEachDescendant(node => {
-        if (node.getKindName() === 'PropertyAccessExpression' && node.getText().startsWith('_.') && !usages.includes(node.getText())) {
-            usages.push(node.getText().replace('_.', ''));
+
+        if (node.getKindName() === 'PropertyAccessExpression' && node.getText().startsWith('_.')) {
+            const match = regex.exec(node.getText());
+            if (match?.[1]) {
+                usages.push(match[1]);
+            }
         }
     })
-
+    
     return usages;
 }
 
@@ -27,6 +32,11 @@ function handleDefaultImport(importDeclaration: ImportDeclaration, sourceFile: S
     const usages = findLodashUsages(importDeclaration, sourceFile);
     // Create named imports for each unique usage
     const uniqueUsages = Array.from(new Set(usages));
+
+    if (uniqueUsages.length === 0) {
+        return;
+    }
+
     uniqueUsages.forEach(usage => {
         sourceFile.addImportDeclaration({
             defaultImport: usage,
@@ -59,6 +69,9 @@ function refactorLodashImports() {
     const projectPath = process.argv[2]
     const project = new Project({
         tsConfigFilePath: path.join(projectPath, 'tsconfig.json'),
+        manipulationSettings: {
+            quoteKind: QuoteKind.Single
+        }
     });
 
     const sourceFiles = project.getSourceFiles();
